@@ -21,8 +21,8 @@ set(CMAKE_CXX_COMPILER "/usr/bin/clang++" CACHE INTERNAL "")
 
 
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS "/home/admin/software/fuzzing/AFLplusplus/libAFLQemuDriver.a -O2 -g")
-set(CMAKE_C_FLAGS  "/home/admin/software/fuzzing/AFLplusplus/libAFLQemuDriver.a -O2 -g")
+set(CMAKE_CXX_FLAGS "$ENV{AFL_ROOT}/libAFLQemuDriver.a -O2 -g")
+set(CMAKE_C_FLAGS  "$ENV{AFL_ROOT}/libAFLQemuDriver.a -O2 -g")
 set(CMAKE_EXE_LINKER_FLAGS "")
 
 FILE(GLOB C_FILES *.c)

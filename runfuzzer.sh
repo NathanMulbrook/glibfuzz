@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+./config.sh
+
 _term() {
     pkill -P $$
 }
