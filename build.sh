@@ -1,6 +1,6 @@
 git submodule init
 git submodule update
-git submodule foreach git pull
+git submodule foreach git pull origin master
 mkdir build
 cd build
 rm CMakeCache.txt
