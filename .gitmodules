@@ -1,0 +1,3 @@
+[submodule "corpus"]
+	path = corpus
+	url = git@git.assignitapp.com:fuzzing/corpus.git

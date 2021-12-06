@@ -1,9 +1,9 @@
 git submodule init
 git submodule update
-git submodule foreach git pull
-mkdir corpus
-cp -r libfastjson-corpus/corpus corpus
+git submodule foreach git pull origin master
+mkdir build
+cd build
 rm CMakeCache.txt
-cmake . 
+cmake .. 
 make clean
-make -j 20
+make install -j 30
