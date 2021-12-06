@@ -23,6 +23,7 @@ else
                     echo "----Launching ${dir::-1}"
 
             ./runfuzzer.sh ${dir::-1} &
+            sleep 5
         done
     else
 
