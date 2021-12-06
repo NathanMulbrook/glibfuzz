@@ -1,3 +1,9 @@
+#if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/run/" CACHE PATH "..." FORCE)
+#endif()
+message("${CMAKE_INSTALL_PREFIX}")
+set(VERBOSE)
+
 cmake_minimum_required(VERSION 3.19)
 project(fuzz_libfastjson)
 set(CMAKE_C_COMPILER "/usr/bin/clang" CACHE INTERNAL "")
@@ -24,13 +30,21 @@ FILE(GLOB H_FILES *.h)
 FILE(GLOB C_FILES2 utils/*.c)
 FILE(GLOB H_FILES2 utils/*.h)
 
+FILE(GLOB TARGETS fuzz_*.cc)
 
-# FILE(GLOB_RECURSE MATH_C_FILES /home/admin/software/fuzzing/glibc/*.c)
-# FILE(GLOB_RECURSE MATH_H_FILES /home/admin/software/fuzzing/glibc/*.h)
+foreach(TARGET ${TARGETS})
+    message(STATUS  "------------${TARGET}")
+    get_filename_component(TARGET_NAME ${TARGET} NAME_WLE)
+    message(STATUS  "-----${TARGET_NAME}")
+    add_executable("${TARGET_NAME}" "${TARGET}" ${C_FILES} ${H_FILES} ${C_FILES2} ${H_FILES2})
 
-# add_library(math STATIC
-#     ${MATH_C_FILES}
-#     ${MATH_H_FILES}
-# )
 
-add_executable(fuzz_cos fuzz_cos.cc ${C_FILES} ${H_FILES} ${C_FILES2} ${H_FILES2})
+    make_directory("${TARGET_NAME}")
+    make_directory("${TARGET_NAME}/input")
+    make_directory("${TARGET_NAME}/output")
+    install(TARGETS "${TARGET_NAME}"
+        DESTINATION "${TARGET_NAME}/")
+    install(DIRECTORY "corpus/glibc/${TARGET_NAME}/"
+        DESTINATION "${TARGET_NAME}/input/"
+        MESSAGE_NEVER )
+endforeach()
