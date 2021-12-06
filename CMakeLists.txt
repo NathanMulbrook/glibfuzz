@@ -48,3 +48,6 @@ foreach(TARGET ${TARGETS})
         DESTINATION "${TARGET_NAME}/input/"
         MESSAGE_NEVER )
 endforeach()
+install(FILES runfuzzer.sh
+    DESTINATION ./
+    PERMISSIONS WORLD_EXECUTE WORLD_READ WORLD_WRITE)
