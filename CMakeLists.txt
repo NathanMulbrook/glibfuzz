@@ -37,7 +37,7 @@ FILE(GLOB H_FILES *.h)
 FILE(GLOB C_FILES2 utils/*.c)
 FILE(GLOB H_FILES2 utils/*.h)
 
-FILE(GLOB TARGETS fuzz_*.cc)
+FILE(GLOB TARGETS harnesses/fuzz_*.cc)
 
 foreach(TARGET ${TARGETS})
     message(STATUS  "------------${TARGET}")
