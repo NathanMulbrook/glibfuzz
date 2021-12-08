@@ -3,7 +3,7 @@ git submodule update
 git submodule foreach git pull origin master
 mkdir build
 
-. fuzzer.conf
+source config.sh
 
 cd build
 rm CMakeCache.txt

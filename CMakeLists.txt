@@ -4,7 +4,7 @@ set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/run/" CACHE PATH "..." FORCE)
 message("${CMAKE_INSTALL_PREFIX}")
 set(VERBOSE)
 
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/fuzzer.conf
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/config.sh
     DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
 
 cmake_minimum_required(VERSION 3.19)
@@ -16,8 +16,8 @@ if(BUILD_LIBFUZZER)
     set(CMAKE_CXX_FLAGS " -fsanitize=fuzzer,address,undefined  -O2 -g -fno-omit-frame-pointer -fno-optimize-sibling-calls -fprofile-instr-generate -fcoverage-mapping")
     set(CMAKE_C_FLAGS  " -fsanitize=fuzzer,address,undefined  -O2 -g -fno-omit-frame-pointer -fno-optimize-sibling-calls -fprofile-instr-generate -fcoverage-mapping")
     set(CMAKE_EXE_LINKER_FLAGS " -fprofile-instr-generate")
-    file(APPEND ${CMAKE_BINARY_DIR}/fuzzer.conf
-        "installed_fuzzer=libfuzzer
+    file(APPEND ${CMAKE_BINARY_DIR}/config.sh
+        "export INSTALLED_FUZZER=libfuzzer
         ")
 endif(BUILD_LIBFUZZER)
 
@@ -26,8 +26,8 @@ if(BUILD_AFL)
     set(CMAKE_CXX_STANDARD 14)
     set(CMAKE_CXX_FLAGS "$ENV{AFL_ROOT}/libAFLQemuDriver.a -O2 -g")
     set(CMAKE_C_FLAGS  "$ENV{AFL_ROOT}/libAFLQemuDriver.a -O2 -g")
-    file(APPEND ${CMAKE_BINARY_DIR}/fuzzer.conf
-        "installed_fuzzer=afl
+    file(APPEND ${CMAKE_BINARY_DIR}/config.sh
+        "export INSTALLED_FUZZER="afl"
         ")
 endif(BUILD_AFL)
 
@@ -59,6 +59,6 @@ foreach(TARGET ${TARGETS})
         MESSAGE_NEVER )
     endif(BUILD_AFL)
 endforeach()
-install(FILES runfuzzer.sh fuzzer.conf
+install(FILES runfuzzer.sh build/config.sh
     DESTINATION ./
     PERMISSIONS OWNER_EXECUTE OWNER_READ OWNER_WRITE)

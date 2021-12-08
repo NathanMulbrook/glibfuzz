@@ -1,14 +1,19 @@
-#!/usr/bin/env bash
-
-. fuzzer.conf
+#!/bin/bash
 
 _term() {
-    pkill -P $$
+    for fuzzerpid in $puzzerpids; do
+        kill -TERM "$fuzzerpid" 2>/dev/null
+    done
+    exit
 }
 
 
 trap _term SIGTERM
 
+pids=()
+
+source ./config.sh
+echo "$INSTALLED_FUZZER"
 builds=$(pwd)/build.sh
 fuzzer=$1
 if [ -f "$builds" ]
@@ -23,7 +28,8 @@ else
                     echo "----Launching ${dir::-1}"
 
             ./runfuzzer.sh ${dir::-1} &
-            sleep 5
+            fuzzerpids+=($!)
+            sleep 4
         done
     else
 
@@ -31,7 +37,7 @@ else
 
         cd $fuzzer
         echo "--------------Launching $fuzzer"
-        if [ INSTALLED_FUZZER == "afl" ] 
+        if [ $INSTALLED_FUZZER == "afl" ] 
         then
         #########AFL
             export AFL_QEMU_PERSISTENT_ADDR=0x$(nm $fuzzer | grep "T LLVMFuzzerTestOneInput" | awk '{print $1}')
