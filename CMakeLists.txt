@@ -47,17 +47,13 @@ foreach(TARGET ${TARGETS})
     install(TARGETS "${TARGET_NAME}"
         DESTINATION "${TARGET_NAME}/")
 
-
-    make_directory("${TARGET_NAME}")
     if(BUILD_LIBFUZZER)
-        make_directory("${TARGET_NAME}/corpus")
         install(DIRECTORY "corpus/glibc/${TARGET_NAME}/"
         DESTINATION "${TARGET_NAME}/corpus/"
         MESSAGE_NEVER )
     endif(BUILD_LIBFUZZER)
     if(BUILD_AFL)
-        make_directory("${TARGET_NAME}/input")
-        make_directory("${TARGET_NAME}/output")
+        make_directory("${CMAKE_INSTALL_PREFIX}/${TARGET_NAME}/output")
         install(DIRECTORY "corpus/glibc/${TARGET_NAME}/"
         DESTINATION "${TARGET_NAME}/input/"
         MESSAGE_NEVER )
