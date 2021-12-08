@@ -31,7 +31,7 @@ else
 
         cd $fuzzer
         echo "--------------Launching $fuzzer"
-        if [ INSTALLED_FUZZER="afl" ] 
+        if [ INSTALLED_FUZZER == "afl" ] 
         then
         #########AFL
             export AFL_QEMU_PERSISTENT_ADDR=0x$(nm $fuzzer | grep "T LLVMFuzzerTestOneInput" | awk '{print $1}')
