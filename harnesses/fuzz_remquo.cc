@@ -15,15 +15,15 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
   auto data4 = provider.ConsumeIntegral<long long int>();
   auto data4a = provider.ConsumeIntegral<long long int>();
 
-  int *quot1;
-  int *quot2;
-  int *quot3;
-  int *quot4;
+  int quot1;
+  int quot2;
+  int quot3;
+  int quot4;
 
-  remquo(data1, data1a, quot1);
-  remquo(data2, data2a, quot2);
-  remquo(data3, data3a, quot3);
-  remquo(data4, data4a, quot4);
+  remquo(data1, data1a, &quot1);
+  remquo(data2, data2a, &quot2);
+  remquo(data3, data3a, &quot3);
+  remquo(data4, data4a, &quot4);
 
   return 0;
 }

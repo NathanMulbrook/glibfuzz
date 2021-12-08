@@ -29,7 +29,12 @@ else
 
             ./runfuzzer.sh ${dir::-1} &
             fuzzerpids+=($!)
-            sleep 4
+
+            if [ $INSTALLED_FUZZER == "afl" ] 
+            then
+                sleep 4
+            fi
+
         done
     else
 
@@ -51,3 +56,7 @@ else
 
     fi
 fi
+while :
+do
+    sleep 5     
+done
