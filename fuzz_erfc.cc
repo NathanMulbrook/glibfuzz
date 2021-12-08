@@ -6,15 +6,17 @@
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
   FuzzedDataProvider provider(data, size);
-  auto data1 = provider.ConsumeFloatingPoint<float>();
-  auto data2 = provider.ConsumeFloatingPoint<double>();
+  auto data1 = provider.ConsumeFloatingPoint<double>();
+  auto data2 = provider.ConsumeFloatingPoint<float>();
   auto data3 = provider.ConsumeFloatingPoint<long double>();
   auto data4 = provider.ConsumeIntegral<long long int>();
 
-  tan(data1);
-  tan(data2);
-  tan(data3);
-  tan(data4);
+
+  erfc(data1);
+  erfc(data2);
+  erfc(data3);
+  erfc(data4);
+
 
   return 0;
 }

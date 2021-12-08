@@ -11,10 +11,10 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
   auto data3 = provider.ConsumeFloatingPoint<long double>();
   auto data4 = provider.ConsumeIntegral<long long int>();
 
-  tan(data1);
-  tan(data2);
-  tan(data3);
-  tan(data4);
+  signbit(data1);
+  signbit(data2);
+  signbit(data3);
+  signbit(data4);
 
   return 0;
 }
