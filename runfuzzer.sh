@@ -17,7 +17,7 @@ echo "$INSTALLED_FUZZER"
 builds=$(pwd)/build.sh
 
 
-while getopts ":f:a:e:" opt; do
+while getopts ":f:a:e:resume:" opt; do
   case $opt in
     f)
       fuzzer=$OPTARG
@@ -28,6 +28,10 @@ while getopts ":f:a:e:" opt; do
     e)
       fuzzer_env_vars=$OPTARG
       ;;
+    resume)
+      fuzzer_afl_resume="-"
+      ;;
+      
   esac
 done
 
@@ -65,7 +69,7 @@ else
         #########AFL
             export AFL_QEMU_PERSISTENT_ADDR=0x$(nm $fuzzer | grep "T LLVMFuzzerTestOneInput" | awk '{print $1}')
             export AFL_QEMU_PERSISTENT_HOOK=$AFL_ROOT/utils/aflpp_driver/aflpp_qemu_driver_hook.so
-            ${fuzzer_env_vars} AFL_QEMU_PERSISTENT_GPR=1 AFL_QEMU_PERSISTENT_MEM=1 AFL_FORKSRV_INIT_TMOUT=60000  AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1 $AFL_ROOT/afl-fuzz -Q -i input -o output ${fuzzer_args} ./$fuzzer
+            ${fuzzer_env_vars} AFL_QEMU_PERSISTENT_GPR=1 AFL_QEMU_PERSISTENT_MEM=1 AFL_FORKSRV_INIT_TMOUT=60000  AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1 $AFL_ROOT/afl-fuzz -Q -i${fuzzer_afl_resume} input -o output ${fuzzer_args} ./$fuzzer
         else
         ######Libfuzzer
             ${fuzzer_env_vars} ./$fuzzer ./corpus -use_counters=0 ${fuzzer_args}
