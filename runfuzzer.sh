@@ -15,19 +15,37 @@ pids=()
 source ./config.sh
 echo "$INSTALLED_FUZZER"
 builds=$(pwd)/build.sh
-fuzzer=$1
+
+
+while getopts ":f:a:e:" opt; do
+  case $opt in
+    f)
+      fuzzer=$OPTARG
+      ;;
+    a)
+      fuzzer_args=$OPTARG
+      ;;
+    e)
+      fuzzer_env_vars=$OPTARG
+      ;;
+  esac
+done
+
+
+
+
 if [ -f "$builds" ]
 then
     cd build/run/
     echo "Moving to Run Dir"
-    ./runfuzzer.sh $fuzzer
+    ./runfuzzer.sh $@
 else
     if [ -z ${fuzzer} ]
     then
         for dir in */; do
                     echo "----Launching ${dir::-1}"
 
-            ./runfuzzer.sh ${dir::-1} &
+            ./runfuzzer.sh -f ${dir::-1} $@ &
             fuzzerpids+=($!)
 
             if [ $INSTALLED_FUZZER == "afl" ] 
@@ -47,10 +65,10 @@ else
         #########AFL
             export AFL_QEMU_PERSISTENT_ADDR=0x$(nm $fuzzer | grep "T LLVMFuzzerTestOneInput" | awk '{print $1}')
             export AFL_QEMU_PERSISTENT_HOOK=$AFL_ROOT/utils/aflpp_driver/aflpp_qemu_driver_hook.so
-            AFL_QEMU_PERSISTENT_GPR=1 AFL_QEMU_PERSISTENT_MEM=1 AFL_FORKSRV_INIT_TMOUT=60000  AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1 $AFL_ROOT/afl-fuzz -Q -i input -o output ./$fuzzer
+            ${fuzzer_env_vars} AFL_QEMU_PERSISTENT_GPR=1 AFL_QEMU_PERSISTENT_MEM=1 AFL_FORKSRV_INIT_TMOUT=60000  AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1 $AFL_ROOT/afl-fuzz -Q -i input -o output ${fuzzer_args} ./$fuzzer
         else
         ######Libfuzzer
-            ./$fuzzer ./corpus
+            ${fuzzer_env_vars} ./$fuzzer ./corpus -use_counters=0 ${fuzzer_args}
         fi          
     
 
