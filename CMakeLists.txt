@@ -24,8 +24,8 @@ endif(BUILD_LIBFUZZER)
 
 if(BUILD_AFL)
     set(CMAKE_CXX_STANDARD 14)
-    set(CMAKE_CXX_FLAGS "$ENV{AFL_ROOT}/libAFLQemuDriver.a -O2 -g")
-    set(CMAKE_C_FLAGS  "$ENV{AFL_ROOT}/libAFLQemuDriver.a -O2 -g")
+    set(CMAKE_CXX_FLAGS "$ENV{FUZZER_AFL_ROOT}/libAFLQemuDriver.a -O2 -g")
+    set(CMAKE_C_FLAGS  "$ENV{FUZZER_AFL_ROOT}/libAFLQemuDriver.a -O2 -g")
     file(APPEND ${CMAKE_BINARY_DIR}/config.sh
         "export INSTALLED_FUZZER="afl"
         ")
